@@ -1,5 +1,6 @@
 using UnityEngine;
 
+[RequireComponent(typeof(Rigidbody2D), typeof(CapsuleCollider2D))]
 public class PlayerController2D : MonoBehaviour
 {
     [Header("Movement")]
@@ -7,32 +8,34 @@ public class PlayerController2D : MonoBehaviour
     public float runSpeed = 8f;
     public float jumpForce = 12f;
 
-    [Header("Gravity")]
-    public float gravity = -25f;
-    public float fallMultiplier = 1.5f;
-
-    [Header("Ground Check (Ray)")]
-    public float groundCheckDistance = 0.25f;
-    public LayerMask groundLayer;
+    [Header("Horizontal Acceleration")]
+    public float acceleration = 40f;
+    public float deceleration = 60f;
 
     private float horizontal;
-    private float verticalVelocity;
-    private bool isGrounded;
     private bool isRunning;
-    CapsuleCollider2D col;
+    private bool isGrounded;
 
+    private Rigidbody2D rb;
+    private CapsuleCollider2D col;
+
+    private bool isTouchingWall;
+    private float wallNormalX;
 
     void Awake()
     {
+        rb = GetComponent<Rigidbody2D>();
         col = GetComponent<CapsuleCollider2D>();
     }
 
     void Update()
     {
         HandleInput();
-        GroundCheck();
         HandleJump();
-        ApplyGravity();
+    }
+
+    void FixedUpdate()
+    {
         Move();
     }
 
@@ -46,90 +49,86 @@ public class PlayerController2D : MonoBehaviour
     }
 
     // ─────────────────────────────
-    // Ground Check & Stick to Ground
-    // ─────────────────────────────
-    void GroundCheck()
-    {
-        // collider 底部中心
-        Vector2 origin = new Vector2(
-            col.bounds.center.x,
-            col.bounds.min.y + 0.01f   // 稍微抬一点，防止刚好贴边
-        );
-
-        RaycastHit2D hit = Physics2D.Raycast(
-            origin,
-            Vector2.down,
-            groundCheckDistance,
-            groundLayer
-        );
-
-        if (hit.collider != null)
-        {
-            isGrounded = true;
-
-            if (verticalVelocity <= 0)
-            {
-                transform.position = new Vector3(
-                    transform.position.x,
-                    hit.point.y + col.bounds.extents.y,
-                    transform.position.z
-                );
-
-                verticalVelocity = 0f;
-            }
-        }
-        else
-        {
-            isGrounded = false;
-        }
-    }
-
-
-    // ─────────────────────────────
     // Jump
     // ─────────────────────────────
     void HandleJump()
     {
         if (isGrounded && Input.GetButtonDown("Jump"))
         {
-            verticalVelocity = jumpForce;
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
             isGrounded = false;
         }
     }
 
     // ─────────────────────────────
-    // Gravity
-    // ─────────────────────────────
-    void ApplyGravity()
-    {
-        // 在地面且未起跳时，不施加重力
-        if (isGrounded && verticalVelocity <= 0)
-            return;
-
-        if (verticalVelocity < 0)
-        {
-            verticalVelocity += gravity * fallMultiplier * Time.deltaTime;
-        }
-        else
-        {
-            verticalVelocity += gravity * Time.deltaTime;
-        }
-    }
-
-    // ─────────────────────────────
-    // Movement
+    // Movement (只控制 X)
     // ─────────────────────────────
     void Move()
     {
-        float speed = isRunning ? runSpeed : walkSpeed;
+        if (isTouchingWall && horizontal != 0 &&
+            Mathf.Sign(horizontal) == -Mathf.Sign(wallNormalX))
+        {
+            rb.linearVelocity = new Vector2(0f, rb.linearVelocity.y);
+            return;
+        }
 
-        Vector3 movement = new Vector3(
-            horizontal * speed,
-            verticalVelocity,
-            0f
-        ) * Time.deltaTime;
+        float targetSpeed = 0f;
 
-        transform.Translate(movement);
+        if (horizontal != 0)
+        {
+            float baseSpeed = isRunning ? runSpeed : walkSpeed;
+            targetSpeed = horizontal * baseSpeed;
+        }
+
+        float speedDiff = targetSpeed - rb.linearVelocity.x;
+        float accelRate = Mathf.Abs(targetSpeed) > 0.01f ? acceleration : deceleration;
+
+        float movement = Mathf.MoveTowards(
+            rb.linearVelocity.x,
+            targetSpeed,
+            accelRate * Time.fixedDeltaTime
+        );
+
+        rb.linearVelocity = new Vector2(
+            movement,
+            rb.linearVelocity.y
+        );
     }
 
+    // ─────────────────────────────
+    // Collision (Ground & Wall)
+    // ─────────────────────────────
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        EvaluateCollision(collision);
+    }
+
+    void OnCollisionStay2D(Collision2D collision)
+    {
+        EvaluateCollision(collision);
+    }
+
+    void OnCollisionExit2D(Collision2D collision)
+    {
+        isGrounded = false;
+        isTouchingWall = false;
+        wallNormalX = 0f;
+    }
+
+    void EvaluateCollision(Collision2D collision)
+    {
+        foreach (ContactPoint2D contact in collision.contacts)
+        {
+            if (contact.normal.y > 0.5f)
+            {
+                isGrounded = true;
+            }
+
+            if (Mathf.Abs(contact.normal.x) > 0.5f)
+            {
+                isTouchingWall = true;
+                wallNormalX = contact.normal.x;
+            }
+        }
+    }
 }
