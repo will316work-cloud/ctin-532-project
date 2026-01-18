@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody2D), typeof(CapsuleCollider2D))]
+[RequireComponent(typeof(Rigidbody2D), typeof(Collider2D))]
 public class PlayerController2D : MonoBehaviour
 {
     [Header("Movement")]
@@ -17,7 +17,7 @@ public class PlayerController2D : MonoBehaviour
     private bool isGrounded;
 
     private Rigidbody2D rb;
-    private CapsuleCollider2D col;
+    private Collider2D col;
 
     private bool isTouchingWall;
     private float wallNormalX;
@@ -25,7 +25,7 @@ public class PlayerController2D : MonoBehaviour
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
-        col = GetComponent<CapsuleCollider2D>();
+        col = GetComponent<Collider2D>();
     }
 
     void Update()
