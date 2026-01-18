@@ -267,6 +267,7 @@ GameObject:
   - component: {fileID: 165394844}
   - component: {fileID: 165394843}
   - component: {fileID: 165394845}
+  - component: {fileID: 165394846}
   m_Layer: 3
   m_Name: Square (5)
   m_TagString: Untagged
@@ -393,6 +394,18 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &165394846
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 165394842}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 60e001448e68f344a8fb4753976ee84a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Weakspot
 --- !u!1 &209488174
 GameObject:
   m_ObjectHideFlags: 0
@@ -404,6 +417,7 @@ GameObject:
   - component: {fileID: 209488176}
   - component: {fileID: 209488175}
   - component: {fileID: 209488177}
+  - component: {fileID: 209488178}
   m_Layer: 3
   m_Name: Square (2)
   m_TagString: Untagged
@@ -530,6 +544,18 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &209488178
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 209488174}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 60e001448e68f344a8fb4753976ee84a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Weakspot
 --- !u!1 &271005941
 GameObject:
   m_ObjectHideFlags: 0
@@ -1846,6 +1872,7 @@ GameObject:
   - component: {fileID: 1198101734}
   - component: {fileID: 1198101733}
   - component: {fileID: 1198101735}
+  - component: {fileID: 1198101736}
   m_Layer: 3
   m_Name: Square (3)
   m_TagString: Untagged
@@ -1972,6 +1999,18 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &1198101736
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1198101732}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 60e001448e68f344a8fb4753976ee84a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Weakspot
 --- !u!1 &1261809857
 GameObject:
   m_ObjectHideFlags: 0
@@ -2019,6 +2058,7 @@ GameObject:
   - component: {fileID: 1295247646}
   - component: {fileID: 1295247645}
   - component: {fileID: 1295247647}
+  - component: {fileID: 1295247648}
   m_Layer: 3
   m_Name: Square (4)
   m_TagString: Untagged
@@ -2145,6 +2185,18 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &1295247648
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1295247644}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 60e001448e68f344a8fb4753976ee84a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Weakspot
 --- !u!1 &1425085119
 GameObject:
   m_ObjectHideFlags: 0
