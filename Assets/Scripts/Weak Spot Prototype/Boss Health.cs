@@ -8,6 +8,11 @@ public class BossHealth : MonoBehaviour
     public UnityEvent<int> OnHealthChanged;
     public UnityEvent OnReachZeroHealth;
 
+    private void Awake()
+    {
+        SetHealth(_health);
+    }
+
     public void SetHealth(int newHealth)
     {
         if (newHealth <= 0)
