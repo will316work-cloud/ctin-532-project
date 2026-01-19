@@ -1,6 +1,5 @@
 using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody2D), typeof(Collider2D))]
 public class PlayerController2D : MonoBehaviour
 {
     [Header("Movement")]
@@ -22,10 +21,29 @@ public class PlayerController2D : MonoBehaviour
     private bool isTouchingWall;
     private float wallNormalX;
 
+    [Header("Fast Fall")]
+    public float fastFallDelay = 0.5f;
+    public float fastFallMultiplier = 2.5f;
+    public float maxFallSpeed = -25f;
+    private float gravityScale;
+
+    private FastFallState fastFallState = FastFallState.None;
+    private float fastFallTimer;
+
+    enum FastFallState
+    {
+        None,
+        Windup,
+        Falling
+    }
+
+
+
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
         col = GetComponent<Collider2D>();
+        gravityScale = rb.gravityScale;
     }
 
     void Update()
@@ -39,14 +57,20 @@ public class PlayerController2D : MonoBehaviour
         Move();
     }
 
-    // ─────────────────────────────
-    // Input
-    // ─────────────────────────────
     void HandleInput()
     {
         horizontal = Input.GetAxisRaw("Horizontal");
         isRunning = Input.GetKey(KeyCode.LeftShift);
+
+        if (!isGrounded &&
+            fastFallState == FastFallState.None &&
+            Input.GetKeyDown(KeyCode.S))
+        {
+            fastFallState = FastFallState.Windup;
+            fastFallTimer = fastFallDelay;
+        }
     }
+
 
     // ─────────────────────────────
     // Jump
@@ -61,17 +85,45 @@ public class PlayerController2D : MonoBehaviour
     }
 
     // ─────────────────────────────
-    // Movement (只控制 X)
+    // Movement
     // ─────────────────────────────
     void Move()
     {
-        if (isTouchingWall && horizontal != 0 &&
-            Mathf.Sign(horizontal) == -Mathf.Sign(wallNormalX))
-        {
-            rb.linearVelocity = new Vector2(0f, rb.linearVelocity.y);
-            return;
-        }
+        Vector2 velocity = rb.linearVelocity;
 
+        //stay in the air
+        if (fastFallState == FastFallState.Windup)
+        {
+            velocity.x = 0f;
+            velocity.y = 0f;
+            rb.gravityScale = 0f;//gravity set to 0
+
+            rb.linearVelocity = velocity;
+
+            fastFallTimer -= Time.fixedDeltaTime;
+            if (fastFallTimer <= 0f)
+            {
+                fastFallState = FastFallState.Falling;
+            }
+            return; 
+        }
+        //falling
+        if (fastFallState == FastFallState.Falling)
+        {
+            velocity.x = 0f;
+            rb.gravityScale = gravityScale;
+
+            if (velocity.y <= 0f)
+            {
+                velocity.y = Mathf.Max(
+                    velocity.y * fastFallMultiplier,
+                    maxFallSpeed
+                );
+            }
+
+            rb.linearVelocity = velocity;
+            return; 
+        }
         float targetSpeed = 0f;
 
         if (horizontal != 0)
@@ -80,24 +132,22 @@ public class PlayerController2D : MonoBehaviour
             targetSpeed = horizontal * baseSpeed;
         }
 
-        float speedDiff = targetSpeed - rb.linearVelocity.x;
-        float accelRate = Mathf.Abs(targetSpeed) > 0.01f ? acceleration : deceleration;
+        float accelRate = Mathf.Abs(targetSpeed) > 0.01f
+            ? acceleration
+            : deceleration;
 
-        float movement = Mathf.MoveTowards(
+        float newX = Mathf.MoveTowards(
             rb.linearVelocity.x,
             targetSpeed,
             accelRate * Time.fixedDeltaTime
         );
 
         rb.linearVelocity = new Vector2(
-            movement,
+            newX,
             rb.linearVelocity.y
         );
     }
 
-    // ─────────────────────────────
-    // Collision (Ground & Wall)
-    // ─────────────────────────────
     void OnCollisionEnter2D(Collision2D collision)
     {
         EvaluateCollision(collision);
@@ -129,6 +179,14 @@ public class PlayerController2D : MonoBehaviour
                 isTouchingWall = true;
                 wallNormalX = contact.normal.x;
             }
+            if (contact.normal.y > 0.5f)
+            {
+                isGrounded = true;
+                fastFallState = FastFallState.None;
+                rb.gravityScale = gravityScale;
+
+            }
+
         }
     }
 }
