@@ -2,6 +2,9 @@ using UnityEngine;
 
 public class PlayerController2D : MonoBehaviour
 {
+    [Header("Character")]
+    private Vector2 spawnPosition;
+
     [Header("Movement")]
     public float walkSpeed = 5f;
     public float runSpeed = 8f;
@@ -44,6 +47,8 @@ public class PlayerController2D : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         col = GetComponent<Collider2D>();
         gravityScale = rb.gravityScale;
+
+        spawnPosition = rb.position;
     }
 
     void Update()
@@ -185,6 +190,10 @@ public class PlayerController2D : MonoBehaviour
                 fastFallState = FastFallState.None;
                 rb.gravityScale = gravityScale;
 
+            }
+            if(collision.transform.tag == "DeadBox")
+            {
+                rb.position = spawnPosition;
             }
 
         }
