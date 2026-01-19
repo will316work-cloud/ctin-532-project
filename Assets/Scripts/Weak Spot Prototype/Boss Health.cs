@@ -6,11 +6,17 @@ public class BossHealth : MonoBehaviour
     [SerializeField] private int _health;
 
     public UnityEvent<int> OnHealthChanged;
+    public UnityEvent OnReachZeroHealth;
 
     public void SetHealth(int newHealth)
     {
-        if (newHealth < 0)
+        if (newHealth <= 0)
         {
+            if (_health > 0)
+            {
+                OnReachZeroHealth?.Invoke();
+            }
+
             _health = 0;
         }
         else
