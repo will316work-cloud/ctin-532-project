@@ -4214,7 +4214,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController2D
   walkSpeed: 10
-  runSpeed: 8
+  runSpeed: 15
   jumpForce: 18
   acceleration: 70
   deceleration: 40
