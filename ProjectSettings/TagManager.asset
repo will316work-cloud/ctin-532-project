@@ -12,12 +12,12 @@ TagManager:
   - Ground
   - Water
   - UI
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - Wall
+  - Mask
+  - Behind Mask
+  - Black
+  - Player
+  - Enemy Sight
   - 
   - 
   - 

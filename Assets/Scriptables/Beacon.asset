@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 54b7c8d02b7ff9d4d835c6c281ca5a7b, type: 3}
+  m_Name: Beacon
+  m_EditorClassIdentifier: Assembly-CSharp::Item
+  _summonedItemPrefab: {fileID: 4405199519919190526, guid: 6040cdb909b657a45a65429dcfb00239, type: 3}
+  _count: 0
+  _itemSprite: {fileID: 7531493392228224071, guid: 39661e175b31aef4baae8cbfda62375a, type: 3}
