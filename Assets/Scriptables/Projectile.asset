@@ -9,9 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 54b7c8d02b7ff9d4d835c6c281ca5a7b, type: 3}
+  m_Script: {fileID: 11500000, guid: 68277a42d0fd8474fb8edd7a94720ca5, type: 3}
   m_Name: Projectile
-  m_EditorClassIdentifier: Assembly-CSharp::Item
+  m_EditorClassIdentifier: Assembly-CSharp::ProjectileItem
   _summonedItemPrefab: {fileID: 8696079406219381604, guid: 1b2d47fc3050deb47af8aed3b4a22fae, type: 3}
   _count: 0
   _itemSprite: {fileID: -4957198307265277906, guid: 3c0a67262cfe9d142b454d4fb30fb111, type: 3}
